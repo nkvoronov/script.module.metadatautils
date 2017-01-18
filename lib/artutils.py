@@ -112,11 +112,9 @@ class ArtUtils(object):
                     tvdb_id = self.thetvdb.get_series_by_imdb_id(imdb_id).get("tvdb_id")
             if tvdb_id:
                 result["art"] = self.fanarttv.tvshow(tvdb_id)
-        if result["art"].get("fanarts") and len(result["art"]["fanarts"]) > 1:
-            result["art"]["extrafanart"] = "plugin://script.skin.helper.service/"\
-                "?action=extrafanart&fanarts=%s" % quote_plus(repr(result["art"]["fanarts"]))
-        for arttype in ["posters", "clearlogos", "banners"]:
-            if result["art"].get(arttype) and len(result["art"][arttype]) > 1:
+        # add additional art with special path
+        for arttype in ["fanarts", "posters", "clearlogos", "banners"]:
+            if result["art"].get(arttype):
                 result["art"][arttype] = "plugin://script.skin.helper.service/"\
                     "?action=extrafanart&fanarts=%s" % quote_plus(repr(result["art"][arttype]))
         return result
@@ -171,7 +169,7 @@ class ArtUtils(object):
 
     @use_cache(14)
     def get_channellogo(self, channelname):
-        '''get channellogo from the given channel name'''
+        '''get channellogo for the given channel name'''
         return self.channellogos.get_channellogo(channelname)
 
     def get_studio_logo(self, studio):

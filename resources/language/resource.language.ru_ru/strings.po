@@ -89,8 +89,8 @@ msgid "Works with both library and online sources (radio)"
 msgstr "Работает вместе с библиотекой и онлайн источниками"
 
 msgctxt "#32018"
-msgid "Enable online scraper (musicbrainz/audiodb/fanart/last.fm)"
-msgstr "Разрешить онлайн скрапер (musicbrainz/audiodb/fanart/last.fm)"
+msgid "Enable online scraper"
+msgstr "Разрешить онлайн скрапер"
 
 msgctxt "#32019"
 msgid "Lookup artwork in a custom folder"
@@ -199,3 +199,24 @@ msgstr "Персональный API ключ для Fanart.TV"
 msgctxt "#32046"
 msgid "see www.fanart.tv for more details about personal and VIP memberships"
 msgstr "смотрите www.fanart.tv для получения более подробной информации"
+
+msgctxt "#32047"
+msgid "Scraper settings"
+msgstr "Настройки скрапера"
+
+msgctxt "#32048"
+msgid "Enable theaudiodb for metadata/artwork"
+msgstr "Разрешить theaudiodb для метаданных/иллюстраций"
+
+msgctxt "#32049"
+msgid "Enable TheAudioDb for metadata/artwork"
+msgstr "Разрешить TheAudioDb для метаданных/иллюстраций"
+
+msgctxt "#32050"
+msgid "Enable last.fm for metadata"
+msgstr "Разрешить last.fm для метаданных"
+
+msgctxt "#32051"
+msgid "Enable fanart.tv for artwork"
+msgstr "Разрешить fanart.tv для иллюстраций"
+

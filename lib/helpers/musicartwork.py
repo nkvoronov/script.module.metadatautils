@@ -39,8 +39,6 @@ class MusicArtwork(object):
     @use_cache(14)
     def get_music_artwork(self, artist, album, track, disc, ignore_cache=False, flush_cache=False):
         '''get music metadata by providing artist and/or track'''
-        if flush_cache:
-            ignore_cache = False
         artist_details = {"art": {}}
         feat_artist_details = {"art": {}}
         album_details = {}
@@ -54,14 +52,20 @@ class MusicArtwork(object):
         for artist in artists:
             if not (artist_details.get("plot") or artist_details.get("art")):
                 # get main artist details
-                artist_details = self.get_artist_metadata(artist, album, track, ignore_cache=ignore_cache)
+                artist_details = self.get_artist_metadata(
+                    artist, album, track, ignore_cache=ignore_cache, flush_cache=flush_cache)
             else:
                 # assume featuring artist
                 feat_artist_details = extend_dict(
                     feat_artist_details, self.get_artist_metadata(
-                        artist, album, track, ignore_cache=ignore_cache))
+                        artist, album, track, ignore_cache=ignore_cache, flush_cache=flush_cache))
             if album or track and not (album_details.get("plot") or album_details.get("art")):
-                album_details = self.get_album_metadata(artist, album, track, disc, ignore_cache=ignore_cache)
+                album_details = self.get_album_metadata(
+                    artist, album, track, disc, ignore_cache=ignore_cache, flush_cache=flush_cache)
+
+        # flush cache returns blank result
+        if flush_cache:
+            return None
 
         # combine artist details and album details
         details = extend_dict(album_details, artist_details)
@@ -242,7 +246,7 @@ class MusicArtwork(object):
             # Open addon settings
             xbmc.executebuiltin("Addon.OpenSettings(%s)" % ADDON_ID)
 
-    def get_artist_metadata(self, artist, album, track, ignore_cache=False):
+    def get_artist_metadata(self, artist, album, track, ignore_cache=False, flush_cache=False):
         '''collect artist metadata'''
         artists = self.get_all_artists(artist, track)
         album = self.get_clean_title(album)
@@ -250,6 +254,9 @@ class MusicArtwork(object):
         artist = artists[0]
         cache_str = "music_artwork.artist.%s" % artist.lower()
         cache = self.artutils.cache.get(cache_str)
+        if flush_cache:
+            self.artutils.cache.set(cache_str, None)
+            return {"art": {}}
         if cache and not ignore_cache:
             return cache
 
@@ -283,11 +290,14 @@ class MusicArtwork(object):
             mb_artistid = details.get("musicbrainzartistid", self.get_mb_artist_id(artist, album, track))
             if mb_artistid:
                 # get artwork from fanarttv
-                details["art"] = extend_dict(details["art"], self.artutils.fanarttv.artist(mb_artistid))
+                if self.artutils.addon.getSetting("music_art_scraper_fatv") == "true":
+                    details["art"] = extend_dict(details["art"], self.artutils.fanarttv.artist(mb_artistid))
                 # get metadata from theaudiodb
-                details = extend_dict(details, self.audiodb.artist_info(mb_artistid))
+                if self.artutils.addon.getSetting("music_art_scraper_adb") == "true":
+                    details = extend_dict(details, self.audiodb.artist_info(mb_artistid))
                 # get metadata from lastfm
-                details = extend_dict(details, self.lastfm.artist_info(mb_artistid))
+                if self.artutils.addon.getSetting("music_art_scraper_lfm") == "true":
+                    details = extend_dict(details, self.lastfm.artist_info(mb_artistid))
 
                 # download artwork to music folder
                 if local_path and self.artutils.addon.getSetting("music_art_download") == "true":
@@ -315,13 +325,16 @@ class MusicArtwork(object):
         self.artutils.cache.set(cache_str, details)
         return details
 
-    def get_album_metadata(self, artist, album, track, disc, ignore_cache=False):
+    def get_album_metadata(self, artist, album, track, disc, ignore_cache=False, flush_cache=False):
         '''collect all album metadata'''
 
         cache_str = "music_artwork.album.%s.%s.%s" % (artist.lower(), album.lower(), disc.lower())
         if not album and track:
             cache_str = "music_artwork.album.%s.%s" % (artist.lower(), track.lower())
         cache = self.artutils.cache.get(cache_str)
+        if flush_cache:
+            self.artutils.cache.set(cache_str, None)
+            return {"art": {}}
         if cache and not ignore_cache:
             return cache
 
@@ -351,11 +364,14 @@ class MusicArtwork(object):
                 mb_albumid = self.get_mb_album_id(artist, album, track)
             if mb_albumid:
                 # get artwork from fanarttv
-                details["art"] = extend_dict(details["art"], self.artutils.fanarttv.album(mb_albumid))
+                if self.artutils.addon.getSetting("music_art_scraper_fatv") == "true":
+                    details["art"] = extend_dict(details["art"], self.artutils.fanarttv.album(mb_albumid))
                 # get metadata from theaudiodb
-                details = extend_dict(details, self.audiodb.album_info(mb_albumid))
+                if self.artutils.addon.getSetting("music_art_scraper_adb") == "true":
+                    details = extend_dict(details, self.audiodb.album_info(mb_albumid))
                 # get metadata from lastfm
-                details = extend_dict(details, self.lastfm.album_info(mb_albumid))
+                if self.artutils.addon.getSetting("music_art_scraper_lfm") == "true":
+                    details = extend_dict(details, self.lastfm.album_info(mb_albumid))
                 # metadata from musicbrainz
                 if not details.get("year") or not details.get("genre"):
                     details = extend_dict(details, self.mbrainz.get_albuminfo(mb_albumid))
@@ -491,19 +507,19 @@ class MusicArtwork(object):
     def get_mb_artist_id(self, artist, album, track):
         '''lookup musicbrainz artist id with query of artist and album/track'''
         artistid = self.mbrainz.get_artist_id(artist, album, track)
-        if not artistid:
-            artistid = self.audiodb.get_artist_id(artist, album, track)
-        if not artistid:
+        if not artistid and self.artutils.addon.getSetting("music_art_scraper_lfm") == "true":
             artistid = self.lastfm.get_artist_id(artist, album, track)
+        if not artistid and self.artutils.addon.getSetting("music_art_scraper_adb") == "true":
+            artistid = self.audiodb.get_artist_id(artist, album, track)
         return artistid
 
     def get_mb_album_id(self, artist, album, track):
         '''lookup musicbrainz album id with query of artist and album/track'''
         albumid = self.mbrainz.get_album_id(artist, album, track)
-        if not albumid:
-            albumid = self.audiodb.get_album_id(artist, album, track)
-        if not albumid:
+        if not albumid and self.artutils.addon.getSetting("music_art_scraper_lfm") == "true":
             albumid = self.lastfm.get_album_id(artist, album, track)
+        if not albumid and self.artutils.addon.getSetting("music_art_scraper_adb") == "true":
+            albumid = self.audiodb.get_album_id(artist, album, track)
         return albumid
 
     @staticmethod

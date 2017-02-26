@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    script.module.artutils
+    script.module.metadatautils
     Provides all kind of mediainfo for kodi media, returned as dict with details
 '''
 
@@ -30,7 +30,7 @@ import xbmcaddon
 import xbmcvfs
 
 
-class ArtUtils(object):
+class MetadataUtils(object):
     '''
         Provides all kind of mediainfo for kodi media, returned as dict with details
     '''

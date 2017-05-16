@@ -220,3 +220,31 @@ msgctxt "#32051"
 msgid "Enable fanart.tv for artwork"
 msgstr "Разрешить fanart.tv для иллюстраций"
 
+msgctxt "#32052"
+msgid "API keys"
+msgstr "API ключи"
+
+msgctxt "#32053"
+msgid "Unlock full features by providing custom API keys"
+msgstr "Разблокируйте все функции, добавив API ключи"
+
+msgctxt "#32054"
+msgid "Patreon API-key for omdbapi.com"
+msgstr "API-ключ Patreon для omdbapi.com"
+
+msgctxt "#32055"
+msgid "Personal developer API-key for TMDB"
+msgstr "Персональный API-ключ разработчика для TMDB"
+
+msgctxt "#32056"
+msgid "Consider donating to these great projects providing you with great metadata"
+msgstr "Рассмотрите возможность пожертвований для этих замечательных проектов, предоставляющих Вам великолепные метаданные"
+
+msgctxt "#32057"
+msgid "Info"
+msgstr "Инфо"
+
+msgctxt "#32058"
+msgid "This modules uses the following sites/services to grab metadata"
+msgstr "В этих модулях используются следующие сайты/службы для захвата метаданных"
+

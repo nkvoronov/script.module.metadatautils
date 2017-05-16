@@ -49,7 +49,7 @@ class MusicArtwork(object):
         # retrieve artist and album details
         artist_details = self.get_artists_metadata(artists, album, track,
                                                    ignore_cache=ignore_cache, flush_cache=flush_cache, manual=manual)
-        album_artist = artist_details.get("albumartist", artist)
+        album_artist = artist_details.get("albumartist", artists[0])
         if album or track:
             album_details = self.get_album_metadata(album_artist, album, track, disc,
                                                     ignore_cache=ignore_cache, flush_cache=flush_cache, manual=manual)
@@ -71,7 +71,6 @@ class MusicArtwork(object):
 
         # return the endresult
         return details
-
 
     def music_artwork_options(self, artist, album, track, disc):
         '''show options for music artwork'''
@@ -379,15 +378,16 @@ class MusicArtwork(object):
     def get_album_kodi_metadata(self, artist, album, track, disc):
         '''get album details from the kodi database'''
         details = {}
-        filters = [{"operator": "is", "field": "album", "value": album}]
-        filters.append({"operator": "is", "field": "artist", "value": artist})
+        filters = [{"operator": "contains", "field": "artist", "value": artist}]
         if artist and track and not album:
             # get album by track
+            filters.append({"operator": "contains", "field": "title", "value": track})
             result = self.metadatautils.kodidb.songs(filters=filters)
             for item in result:
                 album = item["album"]
                 break
         if artist and album:
+            filters.append({"operator": "contains", "field": "album", "value": album})
             result = self.metadatautils.kodidb.albums(filters=filters)
             if result:
                 details = result[0]
@@ -530,6 +530,10 @@ class MusicArtwork(object):
             item = item.decode("utf-8")
             if item in ["cdart.png", "disc.png"]:
                 artwork["discart"] = folderpath + item
+            if item == "thumbback.jpg":
+                artwork["thumbback"] = folderpath + item
+            if item == "spine.jpg":
+                artwork["spine"] = folderpath + item
             elif item == "folder.jpg":
                 artwork["thumb"] = folderpath + item
         return artwork

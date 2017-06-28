@@ -54,6 +54,7 @@ def get_online_setdata(metadatautils, title):
 
 # pylint: disable-msg=too-many-local-variables
 
+
 def get_kodidb_setdata(metadatautils, set_id):
     '''get moviesetdetails from Kodi DB'''
     details = {}

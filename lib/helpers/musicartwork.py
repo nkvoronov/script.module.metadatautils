@@ -233,7 +233,6 @@ class MusicArtwork(object):
 
     def get_album_metadata(self, artist, album, track, disc, ignore_cache=False, flush_cache=False, manual=False):
         '''collect all album metadata'''
-
         cache_str = "music_artwork.album.%s.%s.%s" % (artist.lower(), album.lower(), disc.lower())
         if not album:
             cache_str = "music_artwork.album.%s.%s" % (artist.lower(), track.lower())

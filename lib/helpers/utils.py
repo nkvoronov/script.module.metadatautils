@@ -108,7 +108,7 @@ def get_json(url, params=None, retries=0, ratelimit=None):
         elif response.status_code in (429, 503, 504):
             raise Exception('Read timed out')
     except Exception as exc:
-            result = None
+        result = None
         if "Read timed out" in str(exc) and retries < 5 and not ratelimit:
             # retry on connection error or http server limiting
             monitor = xbmc.Monitor()

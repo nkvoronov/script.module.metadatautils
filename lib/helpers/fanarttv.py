@@ -98,8 +98,8 @@ class FanartTv(object):
             api_key = '639191cb0774661597f28a47e7e2bad5'  # rate limited default api key
         url = '%s%s?api_key=%s' % (self.base_url, query, api_key)
         if self.client_key or self.api_key:
-        if self.client_key:
-            url += '&client_key=%s' % self.client_key
+            if self.client_key:
+                url += '&client_key=%s' % self.client_key
             rate_limit = None
             expiration = datetime.timedelta(days=7)
         else:

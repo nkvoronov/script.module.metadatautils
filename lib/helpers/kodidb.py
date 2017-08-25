@@ -331,11 +331,20 @@ class KodiDb(object):
         return allfavourites
 
     @staticmethod
-    def create_listitem(item, as_tuple=True):
+    def create_listitem(item, as_tuple=True, offscreen=True):
         '''helper to create a kodi listitem from kodi compatible dict with mediainfo'''
         try:
-            liz = xbmcgui.ListItem(label=item.get("label", ""), label2=item.get("label2", ""))
-            liz.setPath(item['file'])
+            if KODI_VERSION > 17:
+                liz = xbmcgui.ListItem(
+                    label=item.get("label", ""),
+                    label2=item.get("label2", ""),
+                    path=item['file'],
+                    offscreen=offscreen)
+            else:
+                liz = xbmcgui.ListItem(
+                    label=item.get("label", ""),
+                    label2=item.get("label2", ""),
+                    path=item['file'])
 
             # only set isPlayable prop if really needed
             if item.get("isFolder", False):
@@ -504,7 +513,7 @@ class KodiDb(object):
                 item["director"] = " / ".join(item.get('director'))
             if 'artist' in item and not isinstance(item['artist'], list):
                 item["artist"] = [item.get('artist')]
-            if not 'artist' in item:
+            if 'artist' not in item:
                 item["artist"] = []
             if item['type'] == "album" and not item.get('album'):
                 item['album'] = item.get('label')

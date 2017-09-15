@@ -16,6 +16,7 @@ from operator import itemgetter
 import re
 from urllib import quote_plus
 import os
+from datetime import timedelta
 
 
 class PvrArtwork(object):
@@ -187,8 +188,11 @@ class PvrArtwork(object):
 
             log_msg("pvrart lookup for title: %s - final result: %s" % (searchtitle, details))
 
-        # store result in cache and return details
-        # always re-store in cache to prevent the cache from expiring
+        # always store result in cache
+        # manual lookups should not expire too often
+        if manual_select:
+            self._mutils.cache.set(cache_str, details, expiration=timedelta(days=365))
+        else:
         self._mutils.cache.set(cache_str, details)
         return details
 
@@ -204,7 +208,7 @@ class PvrArtwork(object):
         if changemade:
             details["art"] = artwork
             # save results in cache
-            self._mutils.cache.set(cache_str, details)
+            self._mutils.cache.set(cache_str, details, expiration=timedelta(days=365))
 
     def pvr_artwork_options(self, title, channel, genre):
         '''show options for pvr artwork'''
@@ -453,7 +457,8 @@ class PvrArtwork(object):
             files = xbmcvfs.listdir(title_path)[1]
             for item in files:
                 item = item.decode("utf-8")
-                if item in ["banner.jpg", "clearart.png", "poster.png", "fanart.jpg", "landscape.jpg"]:
+                if item in ["banner.jpg", "clearart.png", "poster.jpg", "disc.png", "characterart.png",
+                            "fanart.jpg", "landscape.jpg"]:
                     key = item.split(".")[0]
                     details["art"][key] = title_path + item
                 elif item == "logo.png":

@@ -248,3 +248,11 @@ msgctxt "#32058"
 msgid "This modules uses the following sites/services to grab metadata"
 msgstr "В этих модулях используются следующие сайты/службы для захвата метаданных"
 
+msgctxt "#32059"
+msgid "Debug"
+msgstr "Отладка"
+
+msgctxt "#32060"
+msgid "Max Extrafanarts"
+msgstr ""
+

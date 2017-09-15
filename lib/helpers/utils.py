@@ -6,6 +6,7 @@
 import xbmcgui
 import xbmc
 import xbmcvfs
+import xbmcaddon
 import sys
 from traceback import format_exc
 import requests
@@ -43,12 +44,24 @@ RETRIES = Retry(total=5, backoff_factor=5, status_forcelist=[500, 502, 503, 504]
 SESSION.mount('http://', HTTPAdapter(max_retries=RETRIES))
 SESSION.mount('https://', HTTPAdapter(max_retries=RETRIES))
 
+FORCE_DEBUG_LOG = False
+LIMIT_EXTRAFANART = 0
+try:
+    ADDON = xbmcaddon.Addon(ADDON_ID)
+    FORCE_DEBUG_LOG = ADDON.getSetting('debug_log') == 'true'
+    LIMIT_EXTRAFANART = int(ADDON.getSetting('max_extrafanarts'))
+    del ADDON
+except Exception:
+    pass
+
 
 def log_msg(msg, loglevel=xbmc.LOGDEBUG):
     '''log message to kodi logfile'''
     if isinstance(msg, unicode):
         msg = msg.encode('utf-8')
-    xbmc.log("Metadata and Artwork module --> %s" % msg, level=loglevel)
+    if loglevel == xbmc.LOGDEBUG and FORCE_DEBUG_LOG:
+        loglevel = xbmc.LOGNOTICE
+    xbmc.log("%s --> %s" % (ADDON_ID, msg), level=loglevel)
 
 
 def log_exception(modulename, exceptiondetails):
@@ -467,6 +480,21 @@ def download_artwork(folderpath, artwork):
                 for count, image in enumerate(value):
                     image = download_image(os.path.join(efa_path, "fanart%s.jpg" % count), image)
                     images.append(image)
+                    if LIMIT_EXTRAFANART and count == LIMIT_EXTRAFANART:
+                        break
+                new_dict[key] = images
+        elif key == "posters" and value:
+            # copy extraposters only if the directory doesn't exist at all
+            delim = "\\" if "\\" in folderpath else "/"
+            efa_path = "%sextraposter" % folderpath + delim
+            if not xbmcvfs.exists(efa_path):
+                xbmcvfs.mkdir(efa_path)
+                images = []
+                for count, image in enumerate(value):
+                    image = download_image(os.path.join(efa_path, "poster%s.jpg" % count), image)
+                    images.append(image)
+                    if LIMIT_EXTRAFANART and count == LIMIT_EXTRAFANART:
+                        break
                 new_dict[key] = images
         else:
             new_dict[key] = value

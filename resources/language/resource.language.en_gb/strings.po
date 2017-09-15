@@ -248,3 +248,10 @@ msgctxt "#32058"
 msgid "This modules uses the following sites/services to grab metadata"
 msgstr ""
 
+msgctxt "#32059"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#32060"
+msgid "Max Extrafanarts"
+msgstr ""

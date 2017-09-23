@@ -249,10 +249,9 @@ msgid "This modules uses the following sites/services to grab metadata"
 msgstr "В этих модулях используются следующие сайты/службы для захвата метаданных"
 
 msgctxt "#32059"
-msgid "Debug"
-msgstr "Отладка"
+msgid "Enable debug logging (regardless of Kodi log level)"
+msgstr "Включить журнал отладки (независимо от уровня журнала Kodi)"
 
 msgctxt "#32060"
-msgid "Max Extrafanarts"
-msgstr ""
-
+msgid "Limit number of extrafanarts to download (0 is no limit)"
+msgstr "Ограничить количество загружаемых файлов (0 не ограничено)"

@@ -425,7 +425,7 @@ class MetadataUtils(object):
         '''Cleanup instances'''
         self._close_called = True
         if self.cache:
-        self.cache.close()
+            self.cache.close()
             del self.cache
         if self._addon:
             del self._addon

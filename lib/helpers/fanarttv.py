@@ -104,7 +104,7 @@ class FanartTv(object):
             expiration = datetime.timedelta(days=7)
         else:
             # without personal or app provided api key = rate limiting and older info from cache
-            rate_limit = ("fanart.tv",2)
+            rate_limit = ("fanart.tv", 2)
             expiration = datetime.timedelta(days=60)
         cache = self.cache.get(url)
         if cache:

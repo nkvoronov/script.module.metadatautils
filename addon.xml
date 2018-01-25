@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.module.metadatautils"
        name="Metadata and Artwork module"
-       version="1.0.19.013"
+       version="1.0.19.014"
        provider-name="marcelveldt, YLLOW_DRAGON">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
@@ -21,6 +21,6 @@
         <license>Apache 2.0</license>
         <platform>all</platform>
         <email>nkvoronov@gmail.com</email>
-		<source>https://github.com/nkvoronov/script.module.skin.helper.artutils.git</source>
+        <source>https://github.com/nkvoronov/script.module.skin.helper.artutils.git</source>
     </extension>
 </addon>

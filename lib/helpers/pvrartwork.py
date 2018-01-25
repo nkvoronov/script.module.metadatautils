@@ -193,7 +193,7 @@ class PvrArtwork(object):
         if manual_select:
             self._mutils.cache.set(cache_str, details, expiration=timedelta(days=365))
         else:
-        self._mutils.cache.set(cache_str, details)
+            self._mutils.cache.set(cache_str, details)
         return details
 
     def manual_set_pvr_artwork(self, title, channel, genre):

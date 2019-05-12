@@ -21,8 +21,8 @@ msgid "PVR Artwork"
 msgstr "PVR"
 
 msgctxt "#32001"
-msgid "PVR metadata/artwork scraper - needs skin or addon support!"
-msgstr "PVR метаданные/иллюстрации скрапер - нужна подержка обложки!"
+msgid "PVR metadata/artwork scraper"
+msgstr "PVR метаданные/иллюстрации"
 
 msgctxt "#32002"
 msgid "Enable PVR artwork/metadata only for TV recordings"
@@ -41,12 +41,12 @@ msgid "Lookup artwork in a custom folder (e.g. recordings folder)"
 msgstr "Просмотр иллюстраций в пользовательской папке"
 
 msgctxt "#32006"
-msgid "Path to the custom folder"
-msgstr "Путь к пользовательской папке"
+msgid "- Path to the custom folder"
+msgstr "- Путь к пользовательской папке"
 
 msgctxt "#32007"
-msgid "Download artwork to my custom folder"
-msgstr "Загрузить иллюстрации в пользовательскую папку"
+msgid "- Download artwork to my custom folder"
+msgstr "- Загрузить иллюстрации в пользовательскую папку"
 
 msgctxt "#32008"
 msgid "Advanced section: finetune the scraper"
@@ -54,7 +54,7 @@ msgstr "Расширенный раздел: точно настроить ск�
 
 msgctxt "#32009"
 msgid "Use | as delimiter to enter multiple values"
-msgstr "Использовать | в качестве разделителя, чтобы ввести несколько значений"
+msgstr "Использовать | в качестве разделителя для нескольких значений"
 
 msgctxt "#32010"
 msgid "Channels to ignore"
@@ -82,7 +82,7 @@ msgstr "Музыка"
 
 msgctxt "#32016"
 msgid "Provides rich metadata and artwork for skins and addons"
-msgstr "Получить метаданные и иллюстрации для обложек и дополнений"
+msgstr "Музыка метаданные/иллюстрации"
 
 msgctxt "#32017"
 msgid "Works with both library and online sources (radio)"
@@ -97,20 +97,20 @@ msgid "Lookup artwork in a custom folder"
 msgstr "Просмотр иллюстраций в пользовательской папке"
 
 msgctxt "#32020"
-msgid "Path to the custom folder"
-msgstr "Путь к пользовательской папке"
+msgid "- Path to the custom folder"
+msgstr "- Путь к пользовательской папке"
 
 msgctxt "#32021"
 msgid "Lookup artwork in my music folders (library)"
 msgstr "Просмотр иллюстраций в музыкальных папках (библиотека)"
 
 msgctxt "#32022"
-msgid "Download (missing) artwork to my music folders"
-msgstr "Загрузить иллюстрации в музыкальные папки"
+msgid "- Download (missing) artwork to my music folders"
+msgstr "- Загрузить отсут. иллюстрации в музыкальные папки"
 
 msgctxt "#32023"
-msgid "Download (missing) artwork to my custom folder"
-msgstr "Загрузить иллюстрации в пользовательскую папку"
+msgid "- Download (missing) artwork to my custom folder"
+msgstr "- Загрузить отсут. иллюстрации в пользовательскую папку"
 
 msgctxt "#32024"
 msgid "Use custom Musicbrainz mirror"
@@ -250,7 +250,7 @@ msgstr "В этих модулях используются следующие �
 
 msgctxt "#32059"
 msgid "Enable debug logging (regardless of Kodi log level)"
-msgstr "Включить журнал отладки (независимо от уровня журнала Kodi)"
+msgstr "Включить отладку (независимо от уровня журнала Kodi)"
 
 msgctxt "#32060"
 msgid "Limit number of extrafanarts to download (0 is no limit)"

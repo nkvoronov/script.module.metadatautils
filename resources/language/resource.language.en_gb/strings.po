@@ -21,7 +21,7 @@ msgid "PVR Artwork"
 msgstr ""
 
 msgctxt "#32001"
-msgid "PVR metadata/artwork scraper - needs skin or addon support!"
+msgid "PVR metadata/artwork scraper"
 msgstr ""
 
 msgctxt "#32002"
@@ -41,11 +41,11 @@ msgid "Lookup artwork in a custom folder (e.g. recordings folder)"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Path to the custom folder"
+msgid "- Path to the custom folder"
 msgstr ""
 
 msgctxt "#32007"
-msgid "Download artwork to my custom folder"
+msgid "- Download artwork to my custom folder"
 msgstr ""
 
 msgctxt "#32008"
@@ -97,7 +97,7 @@ msgid "Lookup artwork in a custom folder"
 msgstr ""
 
 msgctxt "#32020"
-msgid "Path to the custom folder"
+msgid "- Path to the custom folder"
 msgstr ""
 
 msgctxt "#32021"
@@ -105,11 +105,11 @@ msgid "Lookup artwork in my music folders (library)"
 msgstr ""
 
 msgctxt "#32022"
-msgid "Download (missing) artwork to my music folders"
+msgid "- Download (missing) artwork to my music folders"
 msgstr ""
 
 msgctxt "#32023"
-msgid "Download (missing) artwork to my custom folder"
+msgid "- Download (missing) artwork to my custom folder"
 msgstr ""
 
 msgctxt "#32024"

@@ -3,7 +3,8 @@
 
 """get metadata from omdb"""
 
-from utils import get_json, formatted_number, int_with_commas, try_parse_int, KODI_LANGUAGE, ADDON_ID
+import os, sys
+from .utils import get_json, formatted_number, int_with_commas, try_parse_int, KODI_LANGUAGE, ADDON_ID
 from simplecache import use_cache
 import arrow
 import xbmc
@@ -68,7 +69,7 @@ class Omdb(object):
     def map_details(data):
         """helper method to map the details received from omdb to kodi compatible format"""
         result = {}
-        for key, value in data.iteritems():
+        for key, value in data.items():
             # filter the N/A values
             if value in ["N/A", "NA"] or not value:
                 continue

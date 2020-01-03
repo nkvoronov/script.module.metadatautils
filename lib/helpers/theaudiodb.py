@@ -7,7 +7,8 @@
     Get metadata from theaudiodb
 """
 
-from utils import get_json, strip_newlines, KODI_LANGUAGE, get_compare_string
+import os, sys
+from .utils import get_json, strip_newlines, KODI_LANGUAGE, get_compare_string
 from simplecache import use_cache
 import xbmcvfs
 

@@ -7,6 +7,7 @@
     Get all streamdetails for a kodi media item in database
 """
 
+import os, sys
 
 def get_streamdetails(kodidb, db_id, media_type):
     """helper to get all streamdetails from a video item in kodi db"""
@@ -71,7 +72,7 @@ def get_streamdetails(kodidb, db_id, media_type):
                 streamdetails['AudioStreams.%d.AudioCodec' % count] = item['codec']
             if item['channels']:
                 streamdetails['AudioStreams.%d.AudioChannels' % count] = str(item['channels'])
-            joinchar = " • ".decode("utf-8")
+            joinchar = " • "
             audio_str = joinchar.join([language, codec, channels])
             if audio_str:
                 streamdetails['AudioStreams.%d' % count] = audio_str

@@ -6,11 +6,13 @@
     Provides all kind of mediainfo for kodi media, returned as dict with details
 '''
 
+import os, sys
 import helpers.kodi_constants as kodi_constants
 from helpers.utils import log_msg, ADDON_ID
 from simplecache import use_cache, SimpleCache
-from urllib import quote_plus
 import xbmcvfs
+
+from urllib.parse import quote_plus
 
 
 class MetadataUtils(object):
@@ -206,7 +208,7 @@ class MetadataUtils(object):
         if not self._get_duration:
             from helpers.utils import get_duration
             self._get_duration = get_duration
-        if isinstance(duration, (str, unicode)) and ":" in duration:
+        if isinstance(duration, str) and ":" in duration:
             dur_lst = duration.split(":")
             return {
                 "Duration": "%s:%s" % (dur_lst[0], dur_lst[1]),

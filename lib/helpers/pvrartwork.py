@@ -7,15 +7,15 @@
     Get metadata for Kodi PVR programs
 """
 
-from utils import get_clean_image, DialogSelect, log_msg, extend_dict, ADDON_ID, download_artwork, normalize_string
+import os, sys
+from .utils import get_clean_image, DialogSelect, log_msg, extend_dict, ADDON_ID, download_artwork, normalize_string
+from urllib.parse import quote_plus
 import xbmc
 import xbmcgui
 import xbmcvfs
 from difflib import SequenceMatcher as SM
 from operator import itemgetter
 import re
-from urllib import quote_plus
-import os
 from datetime import timedelta
 
 
@@ -84,7 +84,7 @@ class PvrArtwork(object):
                 # if manual lookup get the title from the user
                 if manual_select:
                     searchtitle = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), searchtitle,
-                                                         type=xbmcgui.INPUT_ALPHANUM).decode("utf-8")
+                                                         type=xbmcgui.INPUT_ALPHANUM)
                     if not searchtitle:
                         return
 
@@ -323,18 +323,16 @@ class PvrArtwork(object):
 
     def get_searchtitle(self, title, channel):
         """common logic to get a proper searchtitle from crappy titles provided by pvr"""
-        if not isinstance(title, unicode):
-            title = title.decode("utf-8")
         title = title.lower()
         # split characters - split on common splitters
-        splitters = self._mutils.addon.getSetting("pvr_art_splittitlechar").decode("utf-8").split("|")
+        splitters = self._mutils.addon.getSetting("pvr_art_splittitlechar").split("|")
         if channel:
             splitters.append(" %s" % channel.lower())
         for splitchar in splitters:
             title = title.split(splitchar)[0]
         # replace common chars and words
-        title = re.sub(self._mutils.addon.getSetting("pvr_art_replace_by_space").decode("utf-8"), ' ', title)
-        title = re.sub(self._mutils.addon.getSetting("pvr_art_stripchars").decode("utf-8"), '', title)
+        title = re.sub(self._mutils.addon.getSetting("pvr_art_replace_by_space"), ' ', title)
+        title = re.sub(self._mutils.addon.getSetting("pvr_art_stripchars"), '', title)
         title = title.strip()
         return title
 
@@ -436,7 +434,6 @@ class PvrArtwork(object):
                 for directory in dirs:
                     if title_path:
                         break
-                    directory = directory.decode("utf-8")
                     curpath = os.path.join(custom_path, directory) + delim
                     for item in [title, searchtitle]:
                         match = SM(None, item, directory).ratio()
@@ -456,7 +453,6 @@ class PvrArtwork(object):
             # we have found a folder for the title, look for artwork
             files = xbmcvfs.listdir(title_path)[1]
             for item in files:
-                item = item.decode("utf-8")
                 if item in ["banner.jpg", "clearart.png", "poster.jpg", "disc.png", "characterart.png",
                             "fanart.jpg", "landscape.jpg"]:
                     key = item.split(".")[0]
@@ -473,7 +469,7 @@ class PvrArtwork(object):
                 if files:
                     details["art"]["extrafanart"] = efa_path
                     for item in files:
-                        item = efa_path + item.decode("utf-8")
+                        item = efa_path + item
                         details["art"]["fanarts"].append(item)
         return details
 
@@ -492,7 +488,7 @@ class PvrArtwork(object):
                 details = kodi_items[0]
                 details["media_type"] = "movie"
         if details:
-            for artkey, artvalue in details["art"].iteritems():
+            for artkey, artvalue in details["art"].items():
                 details["art"][artkey] = get_clean_image(artvalue)
             # todo: check extrafanart ?
         return details

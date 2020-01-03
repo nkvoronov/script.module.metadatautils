@@ -7,8 +7,9 @@
     Get metadata from imdb
 """
 
-from utils import requests, try_parse_int
-import BeautifulSoup
+import os, sys
+from .utils import requests, try_parse_int
+import bs4 as BeautifulSoup
 from simplecache import use_cache
 
 
@@ -23,7 +24,7 @@ class Imdb(object):
         else:
             self.cache = simplecache
         if not kodidb:
-            from kodidb import KodiDb
+            from .kodidb import KodiDb
             self.kodidb = KodiDb()
         else:
             self.kodidb = kodidb

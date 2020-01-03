@@ -3,7 +3,7 @@
 
 """Retrieve animated artwork for kodi movies"""
 
-from utils import get_json, DialogSelect, log_msg, ADDON_ID
+from .utils import get_json, DialogSelect, log_msg, ADDON_ID
 import xbmc
 import xbmcvfs
 import xbmcgui
@@ -20,7 +20,7 @@ class AnimatedArt(object):
         """Initialize - optionaly provide SimpleCache and KodiDb object"""
 
         if not kodidb:
-            from kodidb import KodiDb
+            from .kodidb import KodiDb
             self.kodidb = KodiDb()
         else:
             self.kodidb = kodidb
@@ -133,7 +133,7 @@ class AnimatedArt(object):
                 if selected_item == 1:
                     # browse for image
                     dialog = xbmcgui.Dialog()
-                    image = dialog.browse(2, xbmc.getLocalizedString(1030), 'files', mask='.gif').decode("utf-8")
+                    image = dialog.browse(2, xbmc.getLocalizedString(1030), 'files', mask='.gif')
                     del dialog
                 elif selected_item > 1:
                     # user has selected an image from online results

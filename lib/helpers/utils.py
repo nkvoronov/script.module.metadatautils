@@ -3,19 +3,19 @@
 
 """Various generic helper methods"""
 
+import os, sys
 import xbmcgui
 import xbmc
 import xbmcvfs
 import xbmcaddon
 import sys
-from traceback import format_exc
 import requests
 import arrow
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-import urllib
+import traceback
+from urllib.parse import unquote
 import unicodedata
-import os
 import datetime
 import time
 import xml.etree.ElementTree as ET
@@ -58,8 +58,6 @@ except Exception:
 
 def log_msg(msg, loglevel=xbmc.LOGDEBUG):
     """log message to kodi logfile"""
-    if isinstance(msg, unicode):
-        msg = msg.encode('utf-8')
     if loglevel == xbmc.LOGDEBUG and FORCE_DEBUG_LOG:
         loglevel = xbmc.LOGNOTICE
     xbmc.log("%s --> %s" % (ADDON_ID, msg), level=loglevel)
@@ -67,7 +65,9 @@ def log_msg(msg, loglevel=xbmc.LOGDEBUG):
 
 def log_exception(modulename, exceptiondetails):
     """helper to properly log an exception"""
-    log_msg(format_exc(sys.exc_info()), xbmc.LOGWARNING)
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+    log_msg("Exception details: Type: %s Value: %s Traceback: %s" % (exc_type.__name__, exc_value, ''.join(line for line in lines)), xbmc.LOGWARNING)
     log_msg("ERROR in %s ! --> %s" % (modulename, exceptiondetails), xbmc.LOGERROR)
 
 
@@ -114,7 +114,7 @@ def get_json(url, params=None, retries=0, ratelimit=None):
     try:
         response = requests.get(url, params=params, timeout=20)
         if response and response.content and response.status_code == 200:
-            result = json.loads(response.content.decode('utf-8', 'replace'))
+            result = json.loads(response.content)
             if "results" in result:
                 result = result["results"]
             elif "result" in result:
@@ -165,27 +165,11 @@ def get_xml(url, params=None, retries=0, ratelimit=None):
         else:
             log_exception(__name__, exc)
     return result
-    
-
-def try_encode(text, encoding="utf-8"):
-    """helper to encode a string to utf-8"""
-    try:
-        return text.encode(encoding, "ignore")
-    except Exception:
-        return text
-
-
-def try_decode(text, encoding="utf-8"):
-    """helper to decode a string to unicode"""
-    try:
-        return text.decode(encoding, "ignore")
-    except Exception:
-        return text
 
 
 def urlencode(text):
     """helper to properly urlencode a string"""
-    blah = urllib.urlencode({'blahblahblah': try_encode(text)})
+    blah = urllib.urlencode({'blahblahblah': text})
     blah = blah[13:]
     return blah
 
@@ -225,7 +209,7 @@ def process_method_on_list(method_to_run, items):
             except Exception:
                 log_msg(format_exc(sys.exc_info()))
             log_msg("Error while executing %s with %s" % (method_to_run, items))
-        all_items = filter(None, all_items)
+        all_items = list(filter(None, all_items))
     return all_items
 
 
@@ -242,11 +226,9 @@ def get_clean_image(image):
         image = thumbcache
     if image and "image://" in image:
         image = image.replace("image://", "")
-        image = urllib.unquote(image.encode("utf-8"))
+        image = urllib.unquote(image)
         if image.endswith("/"):
             image = image[:-1]
-    if not isinstance(image, unicode):
-        image = image.decode("utf8")
     return image
 
 
@@ -254,7 +236,7 @@ def get_duration(duration):
     """transform duration time in minutes to hours:minutes"""
     if not duration:
         return {}
-    if isinstance(duration, (unicode, str)):
+    if isinstance(duration, str):
         duration.replace("min", "").replace("", "").replace(".", "")
     try:
         total_minutes = int(duration)
@@ -308,7 +290,7 @@ def extend_dict(org_dict, new_dict, allow_overwrite=None):
         return org_dict
     if not org_dict:
         return new_dict
-    for key, value in new_dict.iteritems():
+    for key, value in new_dict.items():
         if value:
             if not org_dict.get(key):
                 # orginal dict doesn't has this key (or no value), just overwrite
@@ -322,7 +304,7 @@ def extend_dict(org_dict, new_dict, allow_overwrite=None):
                             if item not in org_dict[key]:
                                 org_dict[key].append(item)
                     # previous value was str, combine both in list
-                    elif isinstance(org_dict[key], (str, unicode)):
+                    elif isinstance(org_dict[key], str):
                         org_dict[key] = org_dict[key].split(" / ")
                         for item in value:
                             if item not in org_dict[key]:
@@ -368,14 +350,12 @@ def normalize_string(text):
     text = text.replace("\"", "")
     text = text.strip()
     text = text.rstrip('.')
-    text = unicodedata.normalize('NFKD', try_decode(text))
+    text = unicodedata.normalize('NFKD', text)
     return text
 
 
 def get_compare_string(text):
     """strip all special chars in a string for better comparing of searchresults"""
-    if not isinstance(text, unicode):
-        text.decode("utf-8")
     text = text.lower()
     text = ''.join(e for e in text if e.isalnum())
     return text
@@ -487,7 +467,7 @@ def download_artwork(folderpath, artwork):
     new_dict = {}
     if not xbmcvfs.exists(folderpath):
         xbmcvfs.mkdir(folderpath)
-    for key, value in artwork.iteritems():
+    for key, value in artwork.items():
         if key == "fanart":
             new_dict[key] = download_image(os.path.join(folderpath, "fanart.jpg"), value)
         elif key == "thumb":
@@ -566,11 +546,11 @@ def download_image(filename, url):
 def refresh_image(imagepath):
     """tell kodi texture cache to refresh a particular image"""
     import sqlite3
-    dbpath = xbmc.translatePath("special://database/Textures13.db").decode('utf-8')
+    dbpath = xbmc.translatePath("special://database/Textures13.db")
     connection = sqlite3.connect(dbpath, timeout=30, isolation_level=None)
     try:
         cache_image = connection.execute('SELECT cachedurl FROM texture WHERE url = ?', (imagepath,)).fetchone()
-        if cache_image and isinstance(cache_image, (unicode, str)):
+        if cache_image and isinstance(cache_image, str):
             if xbmcvfs.exists(cache_image):
                 xbmcvfs.delete("special://profile/Thumbnails/%s" % cache_image)
             connection.execute('DELETE FROM texture WHERE url = ?', (imagepath,))
@@ -617,8 +597,8 @@ def manual_set_artwork(artwork, mediatype, header=None):
             # show results for selected art type
             artoptions = []
             selected_item = listitems[selected_item]
-            image = selected_item.getProperty("icon").decode("utf-8")
-            label = selected_item.getLabel().decode("utf-8")
+            image = selected_item.getProperty("icon")
+            label = selected_item.getLabel()
             subheader = "%s: %s" % (header, label)
             if image:
                 # current image
@@ -657,7 +637,7 @@ def manual_set_artwork(artwork, mediatype, header=None):
                 # manual browse...
                 dialog = xbmcgui.Dialog()
                 image = dialog.browse(2, xbmc.getLocalizedString(1030),
-                                      'files', mask='.gif|.png|.jpg').decode("utf-8")
+                                      'files', mask='.gif|.png|.jpg')
                 del dialog
                 if image:
                     artwork[label] = image

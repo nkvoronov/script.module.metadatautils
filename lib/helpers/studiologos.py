@@ -4,10 +4,9 @@
 """Helper for studio logo images"""
 
 import xbmcvfs
-import os
+import os, sys
 from datetime import timedelta
 from simplecache import use_cache
-from utils import try_decode
 
 
 class StudioLogos():
@@ -95,14 +94,11 @@ class StudioLogos():
         else:
             sep = "\\"
         for file in files:
-            file = try_decode(file)
             name = file.split(".png")[0].lower()
             all_files[name] = filespath + file
         for directory in dirs:
-            directory = try_decode(directory)
             files = xbmcvfs.listdir(os.path.join(filespath, directory) + sep)[1]
             for file in files:
-                file = try_decode(file)
                 name = directory + "/" + file.split(".png")[0].lower()
                 all_files[name] = filespath + directory + sep + file
         # return the list

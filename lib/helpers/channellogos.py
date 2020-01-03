@@ -8,7 +8,7 @@
 """
 
 
-from utils import get_json, get_clean_image
+from .utils import get_json, get_clean_image
 import xbmc
 import xbmcvfs
 
@@ -19,7 +19,7 @@ class ChannelLogos(object):
     def __init__(self, kodidb=None):
         """Initialize - optionaly provide KodiDb object"""
         if not kodidb:
-            from kodidb import KodiDb
+            from .kodidb import KodiDb
             self.kodidb = KodiDb()
         else:
             self.kodidb = kodidb

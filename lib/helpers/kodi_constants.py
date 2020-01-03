@@ -6,7 +6,9 @@
     kodi_constants.py
     Several common constants for use with Kodi json api
 """
-from utils import KODI_VERSION
+
+import os, sys
+from .utils import KODI_VERSION
 
 FIELDS_BASE = ["dateadded", "file", "lastplayed", "plot", "title", "art", "playcount"]
 FIELDS_FILE = FIELDS_BASE + ["streamdetails", "director", "resume", "runtime"]

@@ -7,7 +7,8 @@
     Get metadata from The Movie Database
 """
 
-from utils import get_json, KODI_LANGUAGE, try_parse_int, DialogSelect, get_compare_string, int_with_commas, ADDON_ID
+import os, sys
+from .utils import get_json, KODI_LANGUAGE, try_parse_int, DialogSelect, get_compare_string, int_with_commas, ADDON_ID
 from difflib import SequenceMatcher as SM
 from simplecache import use_cache
 from operator import itemgetter
@@ -212,7 +213,7 @@ class Tmdb(object):
             # without personal (or addon specific) api key = rate limiting and older info from cache
             rate_limit = ("themoviedb.org", 5)
             expiration = datetime.timedelta(days=60)
-        cachestr = "tmdb.%s" % params.itervalues()
+        cachestr = "tmdb.%s" % params.values()
         cache = self.cache.get(cachestr)
         if cache:
             # data obtained from cache

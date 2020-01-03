@@ -226,7 +226,7 @@ def get_clean_image(image):
         image = thumbcache
     if image and "image://" in image:
         image = image.replace("image://", "")
-        image = urllib.unquote(image)
+        image = unquote(image)
         if image.endswith("/"):
             image = image[:-1]
     return image

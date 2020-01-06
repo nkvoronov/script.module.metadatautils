@@ -454,9 +454,9 @@ class KodiDb(object):
             liz.setArt(item.get("art", {}))
             if KODI_VERSION > 17:
                 if "icon" in item:
-                    liz.setArt({"icon":item['icon']})
+                    liz.setArt({"icon": item['icon']})
                 if "thumbnail" in item:
-                    liz.setArt({"thumb":item['thumbnail']})
+                    liz.setArt({"thumb": item['thumbnail']})
             else:
                 if "icon" in item:
                     liz.setIconImage(item['icon'])

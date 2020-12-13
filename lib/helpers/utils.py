@@ -546,7 +546,7 @@ def download_image(filename, url):
 def refresh_image(imagepath):
     """tell kodi texture cache to refresh a particular image"""
     import sqlite3
-    dbpath = xbmc.translatePath("special://database/Textures13.db")
+    dbpath = xbmcvfs.translatePath("special://database/Textures13.db")
     connection = sqlite3.connect(dbpath, timeout=30, isolation_level=None)
     try:
         cache_image = connection.execute('SELECT cachedurl FROM texture WHERE url = ?', (imagepath,)).fetchone()

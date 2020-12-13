@@ -300,7 +300,7 @@ class KodiDb(object):
         allfavourites = []
         try:
             from xml.dom.minidom import parse
-            favourites_path = xbmc.translatePath('special://profile/favourites.xml')
+            favourites_path = xbmcvfs.translatePath('special://profile/favourites.xml')
             if xbmcvfs.exists(favourites_path):
                 doc = parse(favourites_path)
                 result = doc.documentElement.getElementsByTagName('favourite')

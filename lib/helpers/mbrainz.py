@@ -8,7 +8,10 @@
 """
 
 import os, sys
-from .utils import ADDON_ID, get_compare_string, log_msg
+if sys.version_info.major == 3:
+    from .utils import ADDON_ID, get_compare_string, log_msg
+else:
+    from utils import ADDON_ID, get_compare_string, log_msg
 from simplecache import use_cache
 import xbmcvfs
 import xbmcaddon
@@ -151,6 +154,8 @@ class MusicBrainz(object):
             if isinstance(mb_artist, dict) and mb_artist.get("artist", ""):
                 # safety check - only allow exact artist match
                 foundartist = mb_artist["artist"].get("name")
+                if sys.version_info.major < 3:
+                    foundartist = foundartist.encode("utf-8").decode("utf-8")
                 if foundartist and get_compare_string(foundartist) == get_compare_string(artist):
                     artistid = mb_artist.get("artist").get("id")
                     break

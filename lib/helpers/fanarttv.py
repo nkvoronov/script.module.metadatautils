@@ -4,7 +4,10 @@
 """Get artwork for media from fanart.tv"""
 
 import os, sys
-from .utils import get_json, KODI_LANGUAGE, process_method_on_list, try_parse_int, ADDON_ID
+if sys.version_info.major == 3:
+    from .utils import get_json, KODI_LANGUAGE, process_method_on_list, try_parse_int, ADDON_ID
+else:
+    from utils import get_json, KODI_LANGUAGE, process_method_on_list, try_parse_int, ADDON_ID
 from operator import itemgetter
 import xbmcaddon
 import datetime
@@ -41,8 +44,12 @@ class FanartTv(object):
         data = self.get_data("music/albums/%s" % album_id)
         if data:
             mapping_table = [("cdart", "discart"), ("albumcover", "thumb")]
-            for item in data["albums"].values():
-                artwork.update(self.map_artwork(item, mapping_table))
+            if sys.version_info.major == 3:
+                for item in data["albums"].values():
+                    artwork.update(self.map_artwork(item, mapping_table))
+            else:
+                for item in data["albums"].itervalues():
+                    artwork.update(self.map_artwork(item, mapping_table))
         return artwork
 
     def musiclabel(self, label_id):
